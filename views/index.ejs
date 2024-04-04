@@ -21,17 +21,18 @@
             )
             center / var(--dot-space) var(--dot-space),
           var(--dot-color);
-          justify-content: center;
-          align-items: center;
-          display: flex;
-          flex-direction: column;
-          height: 100vh;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
         margin: 0;
       }
       h1 {
         color: black;
         font-size: 2rem;
         margin: 10px;
+        font-weight: bold;
       }
       button {
         padding: 10px 20px;
@@ -42,7 +43,13 @@
         color: white;
         border: none;
         border-radius: 5px;
+        -webkit-tap-highlight-color: transparent;
+      }
 
+      button:disabled {
+        -webkit-tap-highlight-color: transparent;
+        background-color: grey;
+        cursor: not-allowed;
       }
     </style>
     <meta charset="UTF-8" />
@@ -61,9 +68,16 @@
     <button id="toggleMode">
       <%= mode ? "Switch to Manual Mode" : "Switch to Auto Mode" %>
     </button>
+
+    <% if (mode) { %>
+    <button disabled="true" id="toggleMachine">
+      <%= machineIsOn ? "Turn Off Machine" : "Turn On Machine" %>
+    </button>
+    <% } else { %>
     <button id="toggleMachine">
       <%= machineIsOn ? "Turn Off Machine" : "Turn On Machine" %>
     </button>
+    <% } %>
 
     <script>
       async function toggleMachine() {
