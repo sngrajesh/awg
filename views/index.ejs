@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        --dot-bg: white;
+        --dot-color: black;
+        --dot-size: 1px;
+        --dot-space: 30px;
+        background: linear-gradient(
+              90deg,
+              var(--dot-bg) calc(var(--dot-space) - var(--dot-size)),
+              transparent 1%
+            )
+            center / var(--dot-space) var(--dot-space),
+          linear-gradient(
+              var(--dot-bg) calc(var(--dot-space) - var(--dot-size)),
+              transparent 1%
+            )
+            center / var(--dot-space) var(--dot-space),
+          var(--dot-color);
+          justify-content: center;
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+          height: 100vh;
+        margin: 0;
+      }
+      h1 {
+        color: black;
+        font-size: 2rem;
+        margin: 10px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        margin: 10px;
+        cursor: pointer;
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 5px;
+
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      <%= machineIsOn ? "On" : "Off" %> - Atmosphere Water Generator
+    </title>
+  </head>
+  <body>
+    <h1>Water Level: <span id="waterLevel"><%= waterLevel %></span></h1>
+    <h1>
+      Machine Status:
+      <span id="machineIsOn"><%= machineIsOn ? "On" : "Off" %></span>
+    </h1>
+    <h1>Mode: <span id="mode"><%= mode ? "Auto" : "Manual" %></span></h1>
+    <button id="toggleMode">
+      <%= mode ? "Switch to Manual Mode" : "Switch to Auto Mode" %>
+    </button>
+    <button id="toggleMachine">
+      <%= machineIsOn ? "Turn Off Machine" : "Turn On Machine" %>
+    </button>
+
+    <script>
+      async function toggleMachine() {
+        const response = await fetch("/toggle-machine", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: "toggle" }),
+        });
+        const data = await response.json();
+        location.reload(); // Reload the page after toggling machine
+      }
+
+      async function toggleMode() {
+        const response = await fetch("/toggle-mode", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: "toggle" }),
+        });
+        const data = await response.json();
+        location.reload(); // Reload the page after toggling mode
+      }
+
+      document
+        .getElementById("toggleMachine")
+        .addEventListener("click", toggleMachine);
+      document
+        .getElementById("toggleMode")
+        .addEventListener("click", toggleMode);
+    </script>
+  </body>
+</html>
