@@ -25,29 +25,56 @@ app.get("/", function (req, res) {
 });
 
 //*****************For NodeMCU********************
+// app.get("/data", function (req, res) {
+//   res.json({
+//     mode: mode,
+//     waterLevel: waterLevel,
+//     machineIsOn: machineIsOn,
+//   });
+// });
 app.get("/data", function (req, res) {
-  res.json({
-    mode: mode,
-    waterLevel: waterLevel,
-    machineIsOn: machineIsOn,
-  });
+  let data;
+  if (mode && machineIsOn) {
+    data = "11";
+  } else if (mode && !machineIsOn) {
+    data = "10";
+  } else if (!mode && machineIsOn) {
+    data = "01";
+  } else {
+    data = "00";
+  }
+  res.send(data);
 });
 
 //Set Mode
+// app.get("/set-mode/:mode", (req, res) => {
+//   mode = req.params.mode === "auto";
+//   res.json({ success: true, mode: mode });
+// });
 app.get("/set-mode/:mode", (req, res) => {
   mode = req.params.mode === "auto";
-  res.json({ success: true, mode: mode });
+  res.send(mode ? "1" : "0");
 });
 
 //Set Water Level
+// app.get("/set-water-level/:level", (req, res) => {
+//   waterLevel = req.params.level;
+//   res.json({ success: true, waterLevel: waterLevel });
+// });
 app.get("/set-water-level/:level", (req, res) => {
   waterLevel = req.params.level;
-  res.json({ success: true, waterLevel: waterLevel });
+  res.send(waterLevel);
 });
+
+//Set Machine Status
+// app.get("/set-machine-status/:status", (req, res) => {
+//   machineIsOn = req.params.status === "on";
+//   res.json({ success: true, machineIsOn: machineIsOn });
+// });
 
 app.get("/set-machine-status/:status", (req, res) => {
   machineIsOn = req.params.status === "on";
-  res.json({ success: true, machineIsOn: machineIsOn });
+  res.send(machineIsOn ? "1" : "0");
 });
 
 //*****************For Browser********************
